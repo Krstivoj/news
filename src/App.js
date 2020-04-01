@@ -1,26 +1,53 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import SwitchButton from "./components/SwitchButton/SwitchButton";
+import Link from "@material-ui/core/Link";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        display: 'flex'
+    },
+    title: {
+        paddingRight: '24px',
+    },
+    button: {
+        position: 'absolute',
+        right: 0
+    }
+}));
+
+export default function App() {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link  color='inherit' className={classes.title} href={'/top-news'}
+                               underline={'none'}>
+                            Top News </Link>
+                    </Typography>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link  color='inherit' className={classes.title} href={'/categories'}
+                               underline={'none'}>
+                            Categories </Link>
+                    </Typography>
+                    <Typography variant="h6" className={classes.title}>
+                        <Link  color='inherit' className={classes.title} href={'/search'}
+                               underline={'none'}>
+                            Search </Link>
+                    </Typography>
+                    <div className={classes.button}>
+                        <SwitchButton/>
+                    </div>
+                    {/*<Button color="inherit" className={classes.button}>Login</Button>*/}
+                </Toolbar>
+            </AppBar>
+        </div>
+    );
 }
-
-export default App;
