@@ -13,21 +13,25 @@ import store from './store/index';
 import Category from "./components/Category/Category/Category";
 import NewsDetails from "./components/News/NewsDetails/NewsDetails";
 import MenuBar from "./components/MenuBar/MenuBar";
+import SearchField from "./components/SearchField/SearchField";
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <MenuBar/>
             <Router>
+                <MenuBar/>
                 <Switch>
                     <Route exact path="/top-news">
                         <NewsList/>
                     </Route>
                     <Route exact path="/categories">
-                        <Category/>
+                        <Category name={'Technology'}/>
                     </Route>
                     <Route exact path="/top-news/detail">
                         <NewsDetails/>
+                    </Route>
+                    <Route exact path="/search">
+                        <SearchField/>
                     </Route>
                 </Switch>
             </Router>

@@ -4,6 +4,11 @@ import {useHistory} from "react-router";
 import {useState} from 'react';
 import './Category.scss';
 import NewsCard from "../../News/NewsCard/NewsCard";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 const transform = [
     { transform: 'translateX(-20rem)', opacity: 0.5,  transition: '1.5s'},
@@ -15,24 +20,29 @@ const transform = [
 function PopulatedItems({currentIndex, articles}) {
     const items = [];
     let styleIndex = 0;
+    const history = useHistory();
+    const goToDetails = (article) => {
+        history.push('/top-news/detail', {...article});
+    };
     for (let index = currentIndex; index < currentIndex + 5; index ++) {
         items.push(
-            <NewsCard
-                key={`slide-card-parent-${index}`}
-                style={transform[styleIndex++]}
-                keyProp={`slide-card-${index}`}
-                title={articles[index].title}
-                description={articles[index].description}
-                content={articles[index].content}
-                imageUrl={articles[index].urlToImage || 'alt'}
-            />);
+            <div key={`details-nav-${index}`} onClick={() => goToDetails(articles[index])}>
+                <NewsCard
+                    key={`slide-card-parent-${index}`}
+                    style={transform[styleIndex++]}
+                    keyProp={`slide-card-${index}`}
+                    title={articles[index].title}
+                    description={articles[index].description}
+                    content={articles[index].content}
+                    imageUrl={articles[index].urlToImage || 'alt'}
+                    use={'category'}
+                /></div>);
     }
     return items;
 }
 
-function Category(props) {
-    const {articles} = props;
-    console.log('ARTICLES', articles);
+function Category({articles, name}) {
+    const [expanded, setExpanded] = useState(false);
     const history = useHistory();
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -40,39 +50,51 @@ function Category(props) {
         history.push('/top-news');
     };
     const nextNews = () => {
-      if (currentIndex < articles.length - 3) {
-          setCurrentIndex(currentIndex+1);
-      }
+        if (currentIndex < articles.length - 3) {
+            setCurrentIndex(currentIndex+1);
+        }
     };
     const previousNews = () => {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex-1);
         }
     };
+    const handleExpansion = () => {
+      setExpanded(!expanded);
+    };
     return (
-        <>
-        <div>
-           <button onClick={backToList}>Go Back</button>
-        </div>
-            <div className="carousel-wrap">
-                <div className="carousel-container">
-                    <button className="carousel-btn prev-btn"
-                            disabled={currentIndex < 1}
-                            onClick={previousNews}
-                    >
-                        <i className="carousel-btn__arrow left" />
-                    </button>
-                    <div className="carousel-slide-list">
-                        <PopulatedItems currentIndex={currentIndex} articles={articles}/>
-                    </div>
-                    <button className="carousel-btn next-btn"
-                            onClick={nextNews}
-                            disabled={currentIndex >= articles.length-3}>
-                        <i className="carousel-btn__arrow right" />
-                    </button>
-                </div>
+        <div className='main'>
+            <div>
+                <button onClick={backToList}>Go Back</button>
             </div>
-    </>
+            <ExpansionPanel expanded={expanded} onChange={handleExpansion}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Typography>{name}</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <div className="carousel-wrap">
+                        <div className="carousel-container">
+                            <button className="carousel-btn prev-btn"
+                                    disabled={currentIndex < 1}
+                                    onClick={previousNews}
+                            >
+                                <i className="carousel-btn__arrow left" />
+                            </button>
+                            <div className="carousel-slide-list">
+                                <PopulatedItems currentIndex={currentIndex} articles={articles}/>
+                            </div>
+                            <button className="carousel-btn next-btn"
+                                    onClick={nextNews}
+                                    disabled={currentIndex >= articles.length-3}>
+                                <i className="carousel-btn__arrow right" />
+                            </button>
+                        </div>
+                    </div>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+        </div>
     )
 }
 

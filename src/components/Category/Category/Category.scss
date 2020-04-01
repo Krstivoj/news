@@ -23,7 +23,9 @@ a {
   text-decoration: none;
   color: inherit;
 }
-
+.main{
+  padding-top: 75px;
+}
 .carousel-wrap {
   display: flex;
   flex-direction: column;
@@ -35,7 +37,7 @@ a {
 
 .carousel-container {
   position: relative;
-  width: 60%;
+  width: 80%;
 }
 
 .carousel-slide-list {
@@ -44,7 +46,8 @@ a {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  min-height: 200px;
+  min-height: 150px;
+  padding: 12px 0;
 }
 
 .carousel-btn {
