@@ -8,6 +8,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import {loadNews, prepareNews} from '../../../services/NewsService';
 
 const transform = [
     { transform: 'translateX(-16rem)', opacity: 0.5,  transition: '1.5s', height: '80%', justifyContent: 'center'},
@@ -50,24 +51,37 @@ function PopulatedItems({currentIndex, articles}) {
     return items;
 }
 
-function Category({articles, name}) {
+function Category({articles, name, handler}) {
     const [expanded, setExpanded] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
+
     const nextNews = () => {
         if (currentIndex < articles.length - 3) {
             setCurrentIndex(currentIndex+1);
         }
     };
+
     const previousNews = () => {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex-1);
         }
     };
+
     const handleExpansion = () => {
         setExpanded(!expanded);
     };
+
     const handleNavigation = () => {
-        console.log('p tag is clicked');
+        const country = localStorage.getItem('country');
+        const payload = {
+            country: country.toLowerCase(),
+            pageSize: 100,
+            category: name.toLowerCase(),
+        };
+        loadNews(payload).then(response => {
+            const news = prepareNews(response);
+            handler(news);
+        });
     };
     return (
         <div className='category-main'>

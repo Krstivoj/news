@@ -6,9 +6,6 @@
   text-align: center;
   transition: background 600ms ease, color 600ms ease;
 }
-input[disabled]{
-    cursor: not-allowed !important;
-}
 input[type="radio"].toggle {
   display: none;
   & + label{
@@ -36,7 +33,6 @@ input[type="radio"].toggle {
     }
   }
   &.toggle-right + label{
-    margin-left: -5px;
     &:after{
       left: -100%;
     }
@@ -49,4 +45,11 @@ input[type="radio"].toggle {
       left: 0;
     }
   }
+}
+.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.container {
+  padding: 4px;
 }

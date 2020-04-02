@@ -1,19 +1,12 @@
 import React, {useEffect, useState} from "react";
 import NewsCard from "../NewsCard/NewsCard";
-import {payload} from '../../../response';
 import {connect} from 'react-redux';
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import {loadNews, prepareNews} from "../../../services/NewsService";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        overflow: 'hidden',
-        backgroundColor: theme.palette.background.paper,
-    },
     gridList: {
         width: '100%',
         height: '100%',
@@ -26,12 +19,12 @@ const useStyles = makeStyles((theme) => ({
         paddingBottom: '70px'
     }
 }));
-function PopulateNewsList({state}) {
+function PopulateNewsList({news}) {
     const classes = useStyles();
-    return state ?
+    return news ?
         <div className={classes.container}>
             <GridList cellHeight={250} className={classes.gridList} cols={4}>
-                {state.articles.map((article, index) => (
+                {news.map((article, index) => (
                     <GridListTile key={`grid-list-tile-${index}`} cols={article.cols || 1}>
                         <NewsCard
                             key={`news-item-${index}`}
@@ -47,23 +40,31 @@ function PopulateNewsList({state}) {
         </div> : <div> No news found</div>
 }
 
-function NewsList(props) {
-    const [state, setState] = useState(null);
-    const {loadArticles} = props;
+function NewsList({news, loadArticles, loadedArticles}) {
+    const [localNews, setLocalNews] = useState([]);
     useEffect(() => {
-        const mapped = payload.articles.map((article, index) => {
-            return {
-                ...article,
-                id: index+1
-            }
-        });
-        loadArticles(mapped);
-        setState(payload);
-    }, [loadArticles]);
+        if(news){
+            setLocalNews(news);
+        }
+        else if (loadedArticles && loadedArticles.length) {
+            setLocalNews(loadedArticles);
+        } else {
+            const country = localStorage.getItem('country');
+            const payload = {
+                country: country.toLowerCase(),
+                pageSize: 100
+            };
+            loadNews(payload).then(response => {
+                const {articles} = prepareNews(response);
+                setLocalNews(articles);
+                loadArticles(articles);
+            });
+        }
+    }, []);
 
     return (
         <div style={{paddingTop: '75px'}}>
-            <PopulateNewsList state={state}/>
+            { localNews ? <PopulateNewsList news={localNews}/> : <div>No News found</div> }
         </div>
     );
 }
@@ -77,5 +78,10 @@ function mapDispatchToProps(dispatch) {
         loadArticles: articles => dispatch(loadArticles(articles))
     };
 }
+function mapStateToProps(state) {
+    return {
+        loadedArticles: state.articles
+    }
+}
 
-export default connect(null, mapDispatchToProps)(NewsList);
+export default connect(mapStateToProps, mapDispatchToProps)(NewsList);

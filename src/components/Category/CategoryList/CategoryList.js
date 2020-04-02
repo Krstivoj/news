@@ -1,16 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Category from "../Category/Category";
+import NewsList from "../../News/NewsList/NewsList";
+import './CategoryList.scss';
 
 function CategoryList(props) {
-
+    const [isCarousel, setCarousel] = useState(true);
+    const [news, setNews] = useState([]);
+    useEffect(() => {
+    },[]);
+    const handleCategoryDetails = (news) => {
+        setNews(news);
+        setCarousel(false);
+    };
     return (
-        <div style={{display: 'flex', flexDirection: 'column', padding: '75px 12px 12px 12px', overflowY: 'auto'}}>
-        <Category name={'Technology'}/>
-        <Category name={'Education'}/>
-        <Category name={'Science'}/>
-        <Category name={'Business'}/>
-        <Category name={'Sport'}/>
-        </div>
+        isCarousel ? <div className={'category_container'}>
+            <Category name={'Technology'} handler={handleCategoryDetails}/>
+            <Category name={'Education'} handler={handleCategoryDetails}/>
+            <Category name={'Science'} handler={handleCategoryDetails}/>
+            <Category name={'Business'} handler={handleCategoryDetails}/>
+            <Category name={'Sport'} handler={handleCategoryDetails}/>
+        </div> : <NewsList articles={news}/>
     )
 }
 export default CategoryList;

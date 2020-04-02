@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
     },
     button: {
         position: 'absolute',
-        right: 0
+        right: 0,
+        paddingRight: '4px'
     },
     link: {
         cursor: 'pointer'
@@ -27,6 +28,7 @@ export default function MenuBar() {
     const navigate = (path) => {
         history.push(path);
     };
+    const disabled = history.location.pathname.includes('/top-news/detail');
     return (
         <div className={classes.root}>
             <AppBar position="fixed" color='secondary'>
@@ -41,7 +43,7 @@ export default function MenuBar() {
                         <p onClick={() => navigate('/search')} className={classes.link}>Search</p>
                     </Typography>
                     <div className={classes.button}>
-                        <SwitchButton disabled={history.location.pathname.includes('/top-news/detail')}/>
+                        <SwitchButton disabled={disabled}/>
                     </div>
                 </Toolbar>
             </AppBar>
