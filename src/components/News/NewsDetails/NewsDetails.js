@@ -19,9 +19,18 @@ function NewsDetails() {
                 description={location.state.description}
                 imageUrl={location.state.imageUrl || location.state.urlToImage}
                 use={'detail'}
-            />
-            <Link size='small' color='primary' onClick={goBack}>
-                Back to list </Link>
+                content={location.state.content}
+            >
+                <div className={'link_back'}>
+                    <Link
+                        size='small'
+                        color='primary'
+                        onClick={goBack}
+                    >
+                        Back to list
+                    </Link>
+                </div>
+            </NewsCard>
         </div>
     );
 }

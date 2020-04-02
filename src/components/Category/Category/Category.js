@@ -10,22 +10,27 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 const transform = [
-    { transform: 'translateX(-20rem)', opacity: 0.5,  transition: '1.5s', height: '260px', width: '200px'},
-    { transform: 'translateX(-10rem)', opacity: 0.75, transition: '1.5s', height: '260px', width: '200px'},
-    { transform: 'translateX(0)',      opacity: 1,    transition: '1.5s', height: '260px', width: '200px'},
-    { transform: 'translateX(10rem)',  opacity: 0.75, transition: '1.5s', height: '260px', width: '200px'},
-    { transform: 'translateX(20rem)',  opacity: 0.5,  transition: '1.5s', height: '260px', width: '200px'}];
+    { transform: 'translateX(-16rem)', opacity: 0.5,  transition: '1.5s', height: '80%', justifyContent: 'center'},
+    { transform: 'translateX(-8rem)',  opacity: 0.75, transition: '1.5s', height: '80%', justifyContent: 'center'},
+    { transform: 'translateX(0)',      opacity: 1,    transition: '1.5s', height: '80%', justifyContent: 'center'},
+    { transform: 'translateX(8rem)',   opacity: 0.75, transition: '1.5s', height: '80%', justifyContent: 'center'},
+    { transform: 'translateX(16rem)',  opacity: 0.5,  transition: '1.5s', height: '80%', justifyContent: 'center'}];
 
 function PopulatedItems({currentIndex, articles}) {
     const items = [];
     let styleIndex = 0;
     const history = useHistory();
+    const style = {
+        height: '100%',
+        width: '100%',
+        display: 'flex'
+    };
     const goToDetails = (article) => {
         history.push('/top-news/detail', {...article});
     };
     for (let index = currentIndex; index < currentIndex + 5; index ++) {
         items.push(
-            <div key={`details-nav-${index}`} onClick={() => goToDetails(articles[index])}>
+            <div style={style} key={`details-nav-${index}`} onClick={() => goToDetails(articles[index])}>
                 <NewsCard
                     key={`slide-card-parent-${index}`}
                     style={transform[styleIndex++]}
@@ -35,19 +40,16 @@ function PopulatedItems({currentIndex, articles}) {
                     content={articles[index].content}
                     imageUrl={articles[index].urlToImage}
                     use={'category'}
-                /></div>);
+                />
+            </div>);
     }
     return items;
 }
 
 function Category({articles, name}) {
     const [expanded, setExpanded] = useState(false);
-    const history = useHistory();
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const backToList = () => {
-        history.push('/top-news');
-    };
     const nextNews = () => {
         if (currentIndex < articles.length - 3) {
             setCurrentIndex(currentIndex+1);
@@ -59,22 +61,19 @@ function Category({articles, name}) {
         }
     };
     const handleExpansion = () => {
-      setExpanded(!expanded);
+        setExpanded(!expanded);
     };
     const handleNavigation = () => {
         console.log('p tag is clicked');
     };
     return (
         <div className='category-main'>
-            <div>
-                <button onClick={backToList}>Go Back</button>
-            </div>
             <ExpansionPanel expanded={expanded}>
-                <ExpansionPanelSummary
-                    onClick={handleExpansion}
-                    expandIcon={<ExpandMoreIcon/>}
-                >
-                    <div><p className={'link'} onClick={handleNavigation}>{name}</p></div>
+                <ExpansionPanelSummary>
+                    <div className={'expansion_panel'}>
+                        <div className={'category_link'}><p className={'link'} onClick={handleNavigation}>{name}</p></div>
+                        <div onClick={handleExpansion} className={'expand_icon'}><ExpandMoreIcon/></div>
+                    </div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <div className="carousel-wrap">

@@ -17,12 +17,19 @@ const useStyles = makeStyles((theme) => ({
     gridList: {
         width: '100%',
         height: '100%',
+        overflow: 'auto'
     },
+    container: {
+        overflowY: 'scroll',
+        width: '100%',
+        height: '100%',
+        paddingBottom: '70px'
+    }
 }));
 function PopulateNewsList({state}) {
     const classes = useStyles();
     return state ?
-        <div style={{paddingTop: '75px'}}>
+        <div className={classes.container}>
             <GridList cellHeight={250} className={classes.gridList} cols={4}>
                 {state.articles.map((article, index) => (
                     <GridListTile key={`grid-list-tile-${index}`} cols={article.cols || 1}>
@@ -55,7 +62,7 @@ function NewsList(props) {
     }, [loadArticles]);
 
     return (
-        <div>
+        <div style={{paddingTop: '75px'}}>
             <PopulateNewsList state={state}/>
         </div>
     );

@@ -4,18 +4,12 @@
   -webkit-box-sizing: border-box;
   box-sizing: inherit;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
 a {
   text-decoration: none;
   color: inherit;
 }
 .category-main{
-  padding-top: 75px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -28,11 +22,14 @@ a {
   overflow: hidden;
   width: 100%;
   min-width: 200px;
+  padding: 12px;
 }
 
 .carousel-container {
   position: relative;
   width: 80%;
+  height: 100%;
+  padding: 16px;
 }
 
 .carousel-slide-list {
@@ -41,7 +38,8 @@ a {
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  min-height: 150px;
+  //min-height: 150px;
+  height: 100%;
   padding: 12px 0;
 }
 
@@ -82,4 +80,18 @@ a {
   cursor: pointer;
   text-decoration: underline;
   font-size: 12pt;
+}
+
+.expand_icon {
+  display: flex;
+  align-self: center;
+}
+.category_link {
+  display: flex;
+  align-self: center;
+  flex-grow: 1;
+}
+.expansion_panel {
+  display: flex;
+  width: 100%;
 }
