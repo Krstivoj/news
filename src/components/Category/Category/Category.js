@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useHistory} from "react-router";
 import {useState} from 'react';
 import './Category.scss';
@@ -9,6 +9,7 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import {loadNews, prepareNews} from '../../../services/NewsService';
+import Loader from "../../Loader/Loader";
 
 const transform = [
     { transform: 'translateX(-16rem)', opacity: 0.5,  transition: '1.5s', height: '80%', justifyContent: 'center'},
@@ -51,12 +52,29 @@ function PopulatedItems({currentIndex, articles}) {
     return items;
 }
 
-function Category({articles, name, handler}) {
+function Category({name, handler}) {
     const [expanded, setExpanded] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [news, setNews] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+
+    useEffect(() => {
+        setLoading(true);
+        const country = localStorage.getItem('country');
+        const payload = {
+            country: country.toLowerCase(),
+            pageSize: 6,
+            category: name.toLowerCase(),
+        };
+        loadNews(payload).then(response => {
+            const {articles} = prepareNews(response);
+            setNews(articles);
+            setLoading(false);
+        });
+    }, []);
 
     const nextNews = () => {
-        if (currentIndex < articles.length - 3) {
+        if (currentIndex < news.length - 3) {
             setCurrentIndex(currentIndex+1);
         }
     };
@@ -72,6 +90,7 @@ function Category({articles, name, handler}) {
     };
 
     const handleNavigation = () => {
+        setLoading(true);
         const country = localStorage.getItem('country');
         const payload = {
             country: country.toLowerCase(),
@@ -79,12 +98,13 @@ function Category({articles, name, handler}) {
             category: name.toLowerCase(),
         };
         loadNews(payload).then(response => {
-            const news = prepareNews(response);
-            handler(news);
+            const {articles} = prepareNews(response);
+            handler(articles, name);
+            setLoading(false);
         });
     };
     return (
-        <div className='category-main'>
+       !isLoading ? <div className='category-main'>
             <ExpansionPanel expanded={expanded}>
                 <ExpansionPanelSummary>
                     <div className={'expansion_panel'}>
@@ -102,18 +122,18 @@ function Category({articles, name, handler}) {
                                 <i className="carousel-btn__arrow left" />
                             </button>
                             <div className="carousel-slide-list">
-                                <PopulatedItems currentIndex={currentIndex} articles={articles}/>
+                                <PopulatedItems currentIndex={currentIndex} articles={news}/>
                             </div>
                             <button className="carousel-btn next-btn"
                                     onClick={nextNews}
-                                    disabled={currentIndex >= articles.length-3}>
+                                    disabled={currentIndex >= news.length-3}>
                                 <i className="carousel-btn__arrow right" />
                             </button>
                         </div>
                     </div>
                 </ExpansionPanelDetails>
             </ExpansionPanel>
-        </div>
+       </div> : <div className={'spinner-div'}><Loader/></div>
     )
 }
 

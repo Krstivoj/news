@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import {useRef} from 'react';
 import './SearchComponent.scss';
+import {loadNews, prepareNews} from "../../services/NewsService";
+import NewsList from "../News/NewsList/NewsList";
+import Loader from "../Loader/Loader";
 
-function SearchField() {
+function SearchField({submitHandler}) {
     const inputRef = useRef({});
     const handleEnterPress = (event) => {
         if (event.which === 13 || event.keyCode === 13) {
@@ -12,7 +15,7 @@ function SearchField() {
     };
     const submit = () => {
         const {value} = inputRef.current;
-        // send value
+        submitHandler(value);
     };
     return (
         <>
@@ -35,9 +38,29 @@ function SearchField() {
 }
 
 export default function SearchComponent() {
+    const [results, setResults] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    const [isSubmitted, setSubmitted] = useState(false);
+
+    const country = localStorage.getItem('country');
+    const handleSearch = (value) => {
+        const params = {
+            country,
+            pageSize: 100,
+            q: value
+        };
+        setSubmitted(true);
+        setLoading(true);
+        loadNews(params).then(response => {
+            const {articles} = prepareNews(response);
+            setResults(articles);
+            setLoading(false);
+        });
+    };
     return (
         <div className={'search_main'}>
-            <SearchField/>
+            <SearchField submitHandler={handleSearch}/>
+            { isSubmitted ? isLoading ? <Loader/> : <NewsList news={results}/> : <></>}
         </div>
     );
 }

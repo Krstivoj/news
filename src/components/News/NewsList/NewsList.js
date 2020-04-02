@@ -3,27 +3,20 @@ import NewsCard from "../NewsCard/NewsCard";
 import {connect} from 'react-redux';
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import {loadNews, prepareNews} from "../../../services/NewsService";
+import './NewsList.scss';
+import Loader from "../../Loader/Loader";
 
-const useStyles = makeStyles((theme) => ({
-    gridList: {
-        width: '100%',
-        height: '100%',
-        overflow: 'auto'
-    },
-    container: {
-        overflowY: 'scroll',
-        width: '100%',
-        height: '100%',
-        paddingBottom: '70px'
-    }
-}));
-function PopulateNewsList({news}) {
-    const classes = useStyles();
-    return news ?
-        <div className={classes.container}>
-            <GridList cellHeight={250} className={classes.gridList} cols={4}>
+const COUNTRIES = {
+    gb: 'Great Britain',
+    us: 'United States of America'
+};
+function PopulateNewsList({news, extra}) {
+    const country = localStorage.getItem('country');
+    return news && news.length ?
+        <div className={'container'}>
+            {extra && <p><span>&#8226;</span>Top {extra} news from {COUNTRIES[country]} </p> }
+            <GridList cellHeight={250} className={'gridList'} cols={4}>
                 {news.map((article, index) => (
                     <GridListTile key={`grid-list-tile-${index}`} cols={article.cols || 1}>
                         <NewsCard
@@ -40,14 +33,17 @@ function PopulateNewsList({news}) {
         </div> : <div> No news found</div>
 }
 
-function NewsList({news, loadArticles, loadedArticles}) {
+function NewsList({news, loadArticles, loadedArticles, extra}) {
     const [localNews, setLocalNews] = useState([]);
+    const [isLoaded, setLoaded] = useState(false);
     useEffect(() => {
         if(news){
             setLocalNews(news);
+            setLoaded(true);
         }
         else if (loadedArticles && loadedArticles.length) {
             setLocalNews(loadedArticles);
+            setLoaded(true);
         } else {
             const country = localStorage.getItem('country');
             const payload = {
@@ -56,15 +52,17 @@ function NewsList({news, loadArticles, loadedArticles}) {
             };
             loadNews(payload).then(response => {
                 const {articles} = prepareNews(response);
+                setLoaded(true);
                 setLocalNews(articles);
                 loadArticles(articles);
             });
         }
-    }, []);
+    }, [news]);
 
     return (
-        <div style={{paddingTop: '75px'}}>
-            { localNews ? <PopulateNewsList news={localNews}/> : <div>No News found</div> }
+        <div className={'main-div'}>
+            { isLoaded ? localNews ?
+                <PopulateNewsList news={localNews} extra={extra}/> : <div>No News found</div> : <Loader/> }
         </div>
     );
 }

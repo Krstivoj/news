@@ -6,10 +6,13 @@ import './CategoryList.scss';
 function CategoryList(props) {
     const [isCarousel, setCarousel] = useState(true);
     const [news, setNews] = useState([]);
+    const [categoryName, setCategoryName] = useState('');
+
     useEffect(() => {
     },[]);
-    const handleCategoryDetails = (news) => {
+    const handleCategoryDetails = (news, name) => {
         setNews(news);
+        setCategoryName(name.toLowerCase());
         setCarousel(false);
     };
     return (
@@ -19,7 +22,7 @@ function CategoryList(props) {
             <Category name={'Science'} handler={handleCategoryDetails}/>
             <Category name={'Business'} handler={handleCategoryDetails}/>
             <Category name={'Sport'} handler={handleCategoryDetails}/>
-        </div> : <NewsList articles={news}/>
+        </div> : <NewsList news={news} extra={categoryName}/>
     )
 }
 export default CategoryList;
