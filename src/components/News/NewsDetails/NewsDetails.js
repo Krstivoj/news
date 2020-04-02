@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import Link from '@material-ui/core/Link';
-import NewsCard from "../NewsCard/NewsCard";
+import NewsCard from '../NewsCard/NewsCard';
 import './NewsDetails.scss';
 
 function NewsDetails() {
@@ -13,7 +13,7 @@ function NewsDetails() {
     };
 
     return (
-        <div style={{display: 'flex', flexDirection: 'column', alignContent: 'center', width:'100%', height:'100%'}}>
+        <div className='main'>
             <NewsCard
                 title={location.state.title}
                 description={location.state.description}

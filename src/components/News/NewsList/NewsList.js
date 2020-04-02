@@ -22,8 +22,8 @@ const useStyles = makeStyles((theme) => ({
 function PopulateNewsList({state}) {
     const classes = useStyles();
     return state ?
-        <div style={{paddingTop: '70px'}}>
-            <GridList cellHeight={250} className={classes.gridList} cols={3}>
+        <div style={{paddingTop: '75px'}}>
+            <GridList cellHeight={250} className={classes.gridList} cols={4}>
                 {state.articles.map((article, index) => (
                     <GridListTile key={`grid-list-tile-${index}`} cols={article.cols || 1}>
                         <NewsCard

@@ -7,15 +7,14 @@ import NewsCard from "../../News/NewsCard/NewsCard";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Typography from "@material-ui/core/Typography";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 
 const transform = [
-    { transform: 'translateX(-20rem)', opacity: 0.5,  transition: '1.5s'},
-    { transform: 'translateX(-10rem)', opacity: 0.75, transition: '1.5s'},
-    { transform: 'translateX(0)',      opacity: 1,    transition: '1.5s'},
-    { transform: 'translateX(10rem)',  opacity: 0.75, transition: '1.5s'},
-    { transform: 'translateX(20rem)',  opacity: 0.5,  transition: '1.5s'}];
+    { transform: 'translateX(-20rem)', opacity: 0.5,  transition: '1.5s', height: '260px', width: '200px'},
+    { transform: 'translateX(-10rem)', opacity: 0.75, transition: '1.5s', height: '260px', width: '200px'},
+    { transform: 'translateX(0)',      opacity: 1,    transition: '1.5s', height: '260px', width: '200px'},
+    { transform: 'translateX(10rem)',  opacity: 0.75, transition: '1.5s', height: '260px', width: '200px'},
+    { transform: 'translateX(20rem)',  opacity: 0.5,  transition: '1.5s', height: '260px', width: '200px'}];
 
 function PopulatedItems({currentIndex, articles}) {
     const items = [];
@@ -34,7 +33,7 @@ function PopulatedItems({currentIndex, articles}) {
                     title={articles[index].title}
                     description={articles[index].description}
                     content={articles[index].content}
-                    imageUrl={articles[index].urlToImage || 'alt'}
+                    imageUrl={articles[index].urlToImage}
                     use={'category'}
                 /></div>);
     }
@@ -62,16 +61,20 @@ function Category({articles, name}) {
     const handleExpansion = () => {
       setExpanded(!expanded);
     };
+    const handleNavigation = () => {
+        console.log('p tag is clicked');
+    };
     return (
-        <div className='main'>
+        <div className='category-main'>
             <div>
                 <button onClick={backToList}>Go Back</button>
             </div>
-            <ExpansionPanel expanded={expanded} onChange={handleExpansion}>
+            <ExpansionPanel expanded={expanded}>
                 <ExpansionPanelSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    onClick={handleExpansion}
+                    expandIcon={<ExpandMoreIcon/>}
                 >
-                    <Typography>{name}</Typography>
+                    <div><p className={'link'} onClick={handleNavigation}>{name}</p></div>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <div className="carousel-wrap">

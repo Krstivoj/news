@@ -8,9 +8,6 @@ import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        // flexGrow: 1,
-        // display: 'flex',
-        // overflow: 'hidden !import'
     },
     title: {
         paddingRight: '24px',

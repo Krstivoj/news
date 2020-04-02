@@ -1,50 +1,54 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import CardHeader from '@material-ui/core/CardHeader';
 import Link from "@material-ui/core/Link";
 import { useHistory } from "react-router-dom";
-import CardActions from "@material-ui/core/CardActions";
 import './NewsCard.scss';
 
 function DescriptionPart({text, handler = () => {}}) {
     if (text) {
-        const description = `${text.slice(0, 40)}...`;
-        return (<>{description}<Link size="small" color="primary" underline={'none'} onClick={handler}>More > </Link></>);
+        const description = `${text.slice(0, 25)}...`;
+        return (
+            <div className={'title'}>
+                {description}
+                <Link
+                    size="small"
+                    color="primary"
+                    underline={'none'}
+                    className={'link_news'}
+                    onClick={handler}
+                >
+                    {`More >`}
+                </Link>
+            </div>);
     }
     return text;
 }
 
 export default function NewsCard(props) {
-    const {title, description, imageUrl, style, keyProp, className, use} = props;
+    const {title, description, imageUrl, use} = props;
     const rootClass = use ? `root_${use}` : 'root';
     const mediaClass = use ? `media_${use}` : 'media';
     const titleClass = use ? `title_${use}` : 'title';
     const history = useHistory();
-    const cardHeader = <p className={titleClass}> {title} </p>;
 
     const handler = (event) => {
+        event.preventDefault();
         history.push('/top-news/detail', {title, description, imageUrl});
     };
     return (
-        <Card className={[rootClass, className].join(' ')} style={{...style}} key={keyProp}>
-            <CardHeader title={cardHeader}/>
-            <CardContent>
-                <CardMedia
-                    className = {mediaClass}
-                    image = {imageUrl}
+        <div className={rootClass}>
+            <div className={'header'}>
+                <p className={titleClass}> {title} </p>
+            </div>
+            <div className={'gap'}/>
+            <div className={'content'}>
+                <img className={mediaClass} src={imageUrl} alt={'logo'}/></div>
+            <div className={'header'}>
+                <DescriptionPart
+                    text={description}
+                    handler={handler}
                 />
-            </CardContent>
-            <CardActions>
-                <Typography gutterBottom>
-                    <DescriptionPart
-                        text={description}
-                        handler={handler}
-                    />
-                </Typography>
-            </CardActions>
-        </Card>
+            </div>
+        </div>
+
     );
 }
