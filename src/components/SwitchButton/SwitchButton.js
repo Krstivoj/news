@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 
 import './SwitchButton.scss';
 
-export default function SwitchButton() {
+export default function SwitchButton({disabled}) {
     const [checked, setChecked] = useState(false);
     const [loaded, setLoaded] = useState(false);
     useEffect(() => {
@@ -25,6 +25,7 @@ export default function SwitchButton() {
                 type="radio"
                 checked={!checked}
                 onChange={() => changeHandler('GB')}
+                disabled={disabled}
             />
             <label htmlFor="toggle-on" className="btn">GB</label>
             <input
@@ -35,6 +36,7 @@ export default function SwitchButton() {
                 type="radio"
                 onChange={() => changeHandler('US')}
                 checked={checked}
+                disabled={disabled}
             />
             <label htmlFor="toggle-off" className="btn">US</label>
         </>

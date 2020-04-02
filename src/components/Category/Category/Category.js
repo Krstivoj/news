@@ -29,19 +29,23 @@ function PopulatedItems({currentIndex, articles}) {
         history.push('/top-news/detail', {...article});
     };
     for (let index = currentIndex; index < currentIndex + 5; index ++) {
-        items.push(
-            <div style={style} key={`details-nav-${index}`} onClick={() => goToDetails(articles[index])}>
-                <NewsCard
-                    key={`slide-card-parent-${index}`}
-                    style={transform[styleIndex++]}
-                    keyProp={`slide-card-${index}`}
-                    title={articles[index].title}
-                    description={articles[index].description}
-                    content={articles[index].content}
-                    imageUrl={articles[index].urlToImage}
-                    use={'category'}
-                />
-            </div>);
+        if (articles[index]) {
+            items.push(
+                <div style={style} key={`details-nav-${index}`} onClick={() => goToDetails(articles[index])}>
+                    <NewsCard
+                        key={`slide-card-parent-${index}`}
+                        style={transform[styleIndex++]}
+                        keyProp={`slide-card-${index}`}
+                        title={articles[index].title}
+                        description={articles[index].description}
+                        content={articles[index].content}
+                        imageUrl={articles[index].urlToImage}
+                        use={'category'}
+                    />
+                </div>);
+        } else {
+            items.push(<div style={style} key={`details-nav-${index}`}/>)
+        }
     }
     return items;
 }
@@ -49,7 +53,6 @@ function PopulatedItems({currentIndex, articles}) {
 function Category({articles, name}) {
     const [expanded, setExpanded] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
-
     const nextNews = () => {
         if (currentIndex < articles.length - 3) {
             setCurrentIndex(currentIndex+1);

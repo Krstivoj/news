@@ -41,7 +41,7 @@ export default function MenuBar() {
                         <p onClick={() => navigate('/search')} className={classes.link}>Search</p>
                     </Typography>
                     <div className={classes.button}>
-                        <SwitchButton/>
+                        <SwitchButton disabled={history.location.pathname.includes('/top-news/detail')}/>
                     </div>
                 </Toolbar>
             </AppBar>

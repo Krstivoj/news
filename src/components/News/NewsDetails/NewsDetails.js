@@ -7,7 +7,6 @@ import './NewsDetails.scss';
 function NewsDetails() {
     const location = useLocation();
     const history = useHistory();
-    console.log(location);
     const goBack = () => {
         history.push('/top-news');
     };
