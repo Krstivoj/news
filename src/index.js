@@ -10,24 +10,28 @@ import {
 import { Provider } from 'react-redux';
 import NewsList from "./components/News/NewsList/NewsList";
 import store from './store/index';
-import Category from "./components/Category/Category/Category";
 import NewsDetails from "./components/News/NewsDetails/NewsDetails";
 import MenuBar from "./components/MenuBar/MenuBar";
+import CategoryList from "./components/Category/CategoryList/CategoryList";
+import SearchComponent from "./components/SearchComponent/SearchComponent";
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <MenuBar/>
             <Router>
+                <MenuBar/>
                 <Switch>
                     <Route exact path="/top-news">
                         <NewsList/>
                     </Route>
                     <Route exact path="/categories">
-                        <Category/>
+                       <CategoryList/>
                     </Route>
                     <Route exact path="/top-news/detail">
                         <NewsDetails/>
+                    </Route>
+                    <Route exact path="/search">
+                        <SearchComponent/>
                     </Route>
                 </Switch>
             </Router>

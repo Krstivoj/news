@@ -1,15 +1,28 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 import './SwitchButton.scss';
 
-export default function SwitchButton({external}) {
-    const [checked, setChecked] = useState(!!external);
-    const changeHandler = () => {
+export default function SwitchButton({disabled}) {
+    const [checked, setChecked] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+    const classes = ['container'];
+    if (disabled){
+        classes.push('disabled');
+    }
+    useEffect(() => {
+        const currentLang = localStorage.getItem('country');
+        currentLang === 'gb' ? setChecked(false) : setChecked(true);
+        setLoaded(true);
+    }, []);
+
+    const changeHandler = (country) => {
+        localStorage.setItem('country', country);
         setChecked(!checked);
     };
+
     return(
-        <>
+        loaded && <div className={classes.join(' ')}>
             <input
                 id="toggle-on"
                 className="toggle toggle-left"
@@ -17,7 +30,7 @@ export default function SwitchButton({external}) {
                 value="true"
                 type="radio"
                 checked={!checked}
-                onChange={changeHandler}
+                onChange={() => changeHandler('gb')}
             />
             <label htmlFor="toggle-on" className="btn">GB</label>
             <input
@@ -26,10 +39,10 @@ export default function SwitchButton({external}) {
                 name="toggle"
                 value="false"
                 type="radio"
-                onChange={changeHandler}
+                onChange={() => changeHandler('us')}
                 checked={checked}
             />
             <label htmlFor="toggle-off" className="btn">US</label>
-        </>
+        </div>
     )
 }

@@ -4,48 +4,47 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SwitchButton from "../SwitchButton/SwitchButton";
-import Link from "@material-ui/core/Link";
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
-        display: 'flex'
     },
     title: {
         paddingRight: '24px',
     },
     button: {
         position: 'absolute',
-        right: 0
+        right: 0,
+        paddingRight: '4px'
+    },
+    link: {
+        cursor: 'pointer'
     }
 }));
 
 export default function MenuBar() {
     const classes = useStyles();
-
+    const history = useHistory();
+    const navigate = (path) => {
+        history.push(path);
+    };
+    const disabled = history.location.pathname.includes('/top-news/detail');
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="fixed" color='secondary'>
                 <Toolbar>
                     <Typography variant="h6" className={classes.title}>
-                        <Link  color='inherit' className={classes.title} href={'/top-news'}
-                               underline={'none'}>
-                            Top News </Link>
+                        <p onClick={() => navigate('/top-news')} className={classes.link}>Top News</p>
                     </Typography>
                     <Typography variant="h6" className={classes.title}>
-                        <Link  color='inherit' className={classes.title} href={'/categories'}
-                               underline={'none'}>
-                            Categories </Link>
+                        <p onClick={() => navigate('/categories')} className={classes.link}>Categories</p>
                     </Typography>
                     <Typography variant="h6" className={classes.title}>
-                        <Link  color='inherit' className={classes.title} href={'/search'}
-                               underline={'none'}>
-                            Search </Link>
+                        <p onClick={() => navigate('/search')} className={classes.link}>Search</p>
                     </Typography>
                     <div className={classes.button}>
-                        <SwitchButton/>
+                        <SwitchButton disabled={disabled}/>
                     </div>
-                    {/*<Button color="inherit" className={classes.button}>Login</Button>*/}
                 </Toolbar>
             </AppBar>
         </div>
